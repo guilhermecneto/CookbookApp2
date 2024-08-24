@@ -1,11 +1,8 @@
 import 'package:app2/home.dart';
 import 'package:app2/models/color_selection.dart';
 import 'package:flutter/material.dart';
-import 'package:app2/theme.dart';
-import 'package:app2/util.dart';
-
-import 'theme.dart';
 import 'util.dart';
+import 'theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,15 +16,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   ThemeMode themeMode = ThemeMode.light;
   ColorSelection colorSelection = ColorSelection.indigo;
-
-  get mockService => null;
 
   @override
   Widget build(BuildContext context) {
     final brightness = View.of(context).platformDispatcher.platformBrightness;
-    TextTheme textTheme = createTextTheme(context, "Nunito Sans", "Nunito Sans");
+    TextTheme textTheme = createTextTheme(context, "ABeeZee", "ABeeZee");
 
     MaterialTheme theme = MaterialTheme(textTheme);
     return MaterialApp(
@@ -37,16 +33,15 @@ class _MyAppState extends State<MyApp> {
       darkTheme: theme.dark(),
       theme: theme.light(),
       home: Home(
-        changeTheme: (useLightMode) {},
-        changeColor: (value) {},
-        title: "Teste",
-        colorSelection: ColorSelection.indigo,
+          changeTheme: (useLightMode) {
+            setState(() {
+              themeMode = useLightMode ? ThemeMode.light : ThemeMode.dark;
+            });
+          },
+          changeColor: (value) {},
+          title: "Yummy",
+          colorSelection: ColorSelection.indigo
       ),
     );
   }
-
-
-
-
 }
-

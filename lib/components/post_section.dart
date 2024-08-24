@@ -1,77 +1,53 @@
+import 'package:app2/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
-import '../models/post.dart';
 
 class PostSection extends StatelessWidget {
   final List<Post> posts;
 
-
-  PostSection(this.posts);
+  const PostSection({super.key, required this.posts});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          "Posts",
+          "Atividades",
           style: Theme.of(context).textTheme.titleLarge,
         ),
         SizedBox(
-          height: 230,
+          height: 500,
           child: ListView.builder(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
 
               return SizedBox(
-                width: 300,
+                width: 100,
                 child: Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  child: Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-                        child: AspectRatio(
-                          aspectRatio: 2,
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Container(
-                                child: Image.asset(
-                                  posts.profileImageUrl,
-                                  fit: BoxFit.cover,
-                                ),
+                      CircleAvatar(
+                        backgroundImage: AssetImage(post.profileImageUrl),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              title: Text(
+                                post.comment,
+                                style: Theme.of(context).textTheme.titleSmall,
                               ),
-                              Positioned(
-                                  top: 4.0,
-                                  right: 4.0,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.favorite,
-                                    ),
-                                    iconSize: 30,
-                                    color: Colors.redAccent,
-                                  ))
-                            ],
-                          ),
+                              subtitle: Text("${post.timestamp} mins ago",
+                                  style: Theme.of(context).textTheme.bodySmall),
+                              onTap: () {
+                                print("Clicou em $post.name");
+                              },
+                            )
+                          ],
                         ),
                       ),
-                      ListTile(
-                        title: Text(
-                          posts.name,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        subtitle: Text(
-                          posts.comment,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        onTap: () {
-                          print("Clicou em ${posts.name}");
-                        },
-                      )
                     ],
                   ),
                 ),
@@ -82,12 +58,4 @@ class PostSection extends StatelessWidget {
       ],
     );
   }
-}
-
-extension on List<Post> {
-  String get profileImageUrl => this.profileImageUrl;
-
-  String get name => this.name;
-
-  String get comment => this.comment;
 }

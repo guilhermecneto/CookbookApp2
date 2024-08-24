@@ -1,7 +1,11 @@
 import 'package:app2/api/explore_data.dart';
+import 'package:app2/components/category_section.dart';
+import 'package:app2/components/post_section.dart';
+import 'package:app2/components/restaurant_section.dart';
 import 'package:flutter/material.dart';
 
-import '../components/restaurant_section.dart';
+import '../models/models.dart';
+import 'package:flutter/widgets.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -11,6 +15,7 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+
   late MockService mockService;
 
   @override
@@ -21,31 +26,32 @@ class _ExplorePageState extends State<ExplorePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: mockService.getExploreData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final restaurants = snapshot.data?.restaurants ?? [];
-          final categories = snapshot.data?.categories ?? [];
-          final posts = snapshot.data?.friendPosts ?? [];
-          return ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            children: [
-              //RestaurantSection
-              RestaurantSection(restaurants: restaurants),
+    return FutureBuilder(future: mockService.getExploreData(), builder: (context, snapshot) {
+      if(snapshot.connectionState == ConnectionState.done) {
+        final restaurants = snapshot.data?.restaurants ?? [];
+        final categories = snapshot.data?.categories ?? [];
+        final posts = snapshot.data?.friendPosts ?? [];
 
-              //CategorySection
+        return ListView(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          children: [
+            RestaurantSection(restaurants: restaurants),
 
-              //PostSection
-            ],
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+            //CategorySection
+            CategorySection(categories: categories),
+
+            //PostSection
+            PostSection(posts: posts)
+
+          ],
+        );
+      } else {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    },
     );
   }
 }
